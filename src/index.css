@@ -1,0 +1,182 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --purple-deepest: #0a0116;
+    --purple-dark: #120322;
+    --purple-surface: #1e0836;
+    --purple-card: #270c46;
+    --purple-neon: #a855f7;
+    --purple-light: #c084fc;
+    --purple-glow: rgba(168, 85, 247, 0.4);
+    --cyan-neon: #06b6d4;
+    --hot-pink: #ec4899;
+    --coral-hot: #ff5757;
+    --white-soft: #fbfbfe;
+  }
+
+  body {
+    color: #1e293b;
+    background-color: #0a0116;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+}
+
+/* Animations */
+@keyframes flow-purple {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes pulse-btn-tech {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 6px 0 #7e22ce, 0 12px 30px rgba(168, 85, 247, 0.5);
+  }
+  50% {
+    transform: scale(1.02);
+    box-shadow: 0 6px 0 #7e22ce, 0 16px 40px rgba(192, 132, 252, 0.7);
+  }
+}
+
+@keyframes marquee-track-left {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-track-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0%); }
+}
+
+.animate-marquee-left {
+  display: flex;
+  width: max-content;
+  animation: marquee-track-left 36s linear infinite;
+}
+
+.animate-marquee-right {
+  display: flex;
+  width: max-content;
+  animation: marquee-track-right 36s linear infinite;
+}
+
+.marquee-pause-hover:hover .animate-marquee-left,
+.marquee-pause-hover:hover .animate-marquee-right,
+.marquee-pause-hover:focus-within .animate-marquee-left,
+.marquee-pause-hover:focus-within .animate-marquee-right {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee-left,
+  .animate-marquee-right {
+    animation: none;
+  }
+}
+
+/* High-Tech Glowing Borders */
+.nm-purple-glow {
+  border-radius: 28px;
+  padding: 3px;
+  background: linear-gradient(120deg, #a855f7, #06b6d4, #ec4899, #f59e0b, #8b5cf6, #a855f7);
+  background-size: 300% 300%;
+  animation: flow-purple 5s linear infinite;
+  box-shadow: 0 14px 45px rgba(168, 85, 247, 0.35), 0 0 25px rgba(6, 182, 212, 0.25);
+}
+
+.tech-neon-glow {
+  box-shadow: 0 0 35px rgba(168, 85, 247, 0.3), inset 0 0 15px rgba(168, 85, 247, 0.1);
+}
+
+.tech-cyan-glow {
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.35);
+}
+
+/* Tech Buttons */
+.btn-tech-hot {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(90deg, #9333ea, #c026d3, #e11d48);
+  color: #ffffff;
+  font-weight: 800;
+  text-align: center;
+  border-radius: 14px;
+  box-shadow: 0 6px 0 #581c87, 0 12px 30px rgba(192, 38, 211, 0.45);
+  transition: all 0.15s ease;
+}
+
+.btn-tech-hot:hover {
+  transform: translateY(2px);
+  box-shadow: 0 4px 0 #581c87, 0 8px 22px rgba(192, 38, 211, 0.55);
+}
+
+.btn-tech-hot:active {
+  transform: translateY(6px);
+  box-shadow: 0 0 0 #581c87;
+}
+
+.btn-tech-pulse {
+  animation: pulse-btn-tech 2.2s ease-in-out infinite;
+}
+
+.btn-tech-ghost {
+  background: #ffffff;
+  color: #581c87;
+  border: 3px solid #9333ea;
+  border-radius: 14px;
+  font-weight: 800;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.btn-tech-ghost:hover {
+  background: #faf5ff;
+  border-color: #7e22ce;
+  transform: translateY(-1px);
+}
+
+/* Cyber and Tech Grid Patterns */
+.bg-tech-grid-dark {
+  background-color: #0a0116;
+  background-image: 
+    linear-gradient(to right, rgba(168, 85, 247, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(168, 85, 247, 0.08) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.bg-tech-grid-light {
+  background-color: #ffffff;
+  background-image: 
+    linear-gradient(to right, rgba(147, 51, 234, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(147, 51, 234, 0.05) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.bg-tech-dots-dark {
+  background-image: radial-gradient(rgba(192, 132, 252, 0.18) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+}
+
+.bg-tech-dots-light {
+  background-image: radial-gradient(rgba(147, 51, 234, 0.1) 1.2px, transparent 1.2px);
+  background-size: 20px 20px;
+}
+
+/* Glassmorphism */
+.glass-tech-purple {
+  background: rgba(30, 8, 54, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.glass-tech-white {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(192, 132, 252, 0.25);
+}
+
+
