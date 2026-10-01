@@ -76,6 +76,22 @@
   }
 }
 
+/* Efeito de fade-in com leve movimento vertical */
+@keyframes map-fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-map-fade-in {
+  animation: map-fade-in-up 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
 /* High-Tech Glowing Borders */
 .nm-purple-glow {
   border-radius: 28px;

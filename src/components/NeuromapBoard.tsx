@@ -1,4 +1,18 @@
 import React from 'react';
+import { Mapa002ReservaEmergencia } from './Mapa002ReservaEmergencia';
+
+// Assets estáticos oficiais anexados diretamente pelo usuário
+import mapa002StaticImg from '../assets/maps/mapa-002-reserva-de-emergencia.png';
+import mapa003StaticImg from '../assets/maps/mapa-003-orcamento-pessoal.png';
+import mapa004StaticImg from '../assets/maps/mapa-004-dividas.png';
+import mapa005StaticImg from '../assets/maps/mapa-005-patrimonio.png';
+
+export const OFFICIAL_MAP_ASSETS: Record<number, string> = {
+  2: mapa002StaticImg,
+  3: mapa003StaticImg,
+  4: mapa004StaticImg,
+  5: mapa005StaticImg,
+};
 
 export interface NeuromapBoardData {
   id: number;
@@ -74,18 +88,59 @@ export const NeuromapBoard: React.FC<NeuromapBoardProps> = ({
   showZoomHint = true,
   customImage,
 }) => {
-  // Se houver foto personalizada definida pelo usuário, exibe diretamente a imagem
-  if (customImage) {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const [isInView, setIsInView] = React.useState(false);
+
+  // Efeito de entrada suave com movimento vertical ao entrar na viewport
+  React.useEffect(() => {
+    const el = containerRef.current;
+    if (!el) {
+      setIsInView(true);
+      return;
+    }
+
+    if (typeof IntersectionObserver === 'undefined') {
+      setIsInView(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observer.unobserve(el);
+        }
+      },
+      {
+        threshold: 0.08,
+        rootMargin: '0px 0px -20px 0px',
+      }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [boardId]);
+
+  // Determina a imagem original: foto personalizada ou asset estático oficial anexado
+  const activeImage = customImage || OFFICIAL_MAP_ASSETS[boardId];
+
+  // Se houver asset estático ou imagem anexada, exibe o arquivo original com fidelidade absoluta
+  if (activeImage) {
     const boardMeta = ATTACHED_MAPS_LIST.find((b) => b.id === boardId);
     return (
       <div 
-        className={`relative w-full aspect-[16/10] bg-white rounded-2xl shadow-xl overflow-hidden cursor-pointer group flex items-center justify-center border border-purple-100 ${className}`}
+        ref={containerRef}
+        className={`relative w-full aspect-[16/10] bg-white rounded-2xl shadow-xl overflow-hidden cursor-pointer group flex items-center justify-center border border-purple-100 transition-all duration-700 ease-out transform ${
+          isInView 
+            ? 'opacity-100 translate-y-0 scale-100' 
+            : 'opacity-0 translate-y-6 scale-[0.98]'
+        } ${className}`}
         onClick={onExpand}
       >
         <img
-          src={customImage}
+          src={activeImage}
           alt={boardMeta?.title ? `${boardMeta.code}: ${boardMeta.title}` : `Mapa Mental ${boardId}`}
-          className="w-full h-full object-contain select-none group-hover:scale-[1.02] transition-transform duration-300"
+          className="w-full h-full object-contain select-none group-hover:scale-[1.01] transition-transform duration-500"
           loading="lazy"
         />
 
@@ -254,106 +309,10 @@ export const NeuromapBoard: React.FC<NeuromapBoardProps> = ({
         );
 
       // ══════════════════════════════════════════════════════════════════════
-      // PRANCHA 2: RESERVA DE EMERGÊNCIA (MAPA 002)
+      // PRANCHA 2: RESERVA DE EMERGÊNCIA (MAPA 002) - DESIGN OFICIAL FIXADO
       // ══════════════════════════════════════════════════════════════════════
       case 2:
-        return (
-          <div className="w-full h-full bg-[#FAF9F5] text-slate-800 p-2.5 sm:p-4 flex flex-col justify-between text-[11px] sm:text-xs select-none">
-            {/* Header */}
-            <div className="bg-[#0A2540] text-white rounded-lg p-2.5 sm:p-3 mb-2 flex items-center justify-between shadow-sm">
-              <div>
-                <span className="text-[9px] font-black tracking-widest text-cyan-300 uppercase block">NEUROMAP · MAPA 002</span>
-                <h2 className="text-sm sm:text-lg font-black tracking-wide leading-tight">
-                  RESERVA DE EMERGÊNCIA
-                </h2>
-                <p className="text-[10px] sm:text-xs text-slate-300">
-                  Proteja-se dos imprevistos e mantenha sua tranquilidade financeira.
-                </p>
-              </div>
-              <span className="bg-emerald-500/20 text-emerald-300 font-bold px-2 py-1 rounded text-[10px] border border-emerald-400/40">
-                Colchão de Segurança
-              </span>
-            </div>
-
-            {/* Top Cards: O que é + Tabela Prática */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-2 my-1 flex-1">
-              {/* O que é & Para que serve */}
-              <div className="md:col-span-5 bg-white rounded-lg p-2.5 border border-slate-200 shadow-sm flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center gap-1.5 font-black text-blue-900 mb-1">
-                    <span className="w-4 h-4 rounded-full bg-blue-600 text-white text-[10px] flex items-center justify-center">1</span>
-                    <span className="font-extrabold text-[11px]">O QUE É & PARA QUE SERVE</span>
-                  </div>
-                  <p className="text-[10px] text-slate-600 mb-2 leading-relaxed">
-                    Valor guardado para cobrir imprevistos sem precisar se endividar ou resgatar investimentos de longo prazo.
-                  </p>
-                  <ul className="text-[9px] text-slate-700 space-y-1">
-                    <li className="flex items-center gap-1"><span className="text-emerald-600 font-bold">✓</span> Cobrir despesas médicas urgentes</li>
-                    <li className="flex items-center gap-1"><span className="text-emerald-600 font-bold">✓</span> Queda de renda ou desemprego</li>
-                    <li className="flex items-center gap-1"><span className="text-emerald-600 font-bold">✓</span> Manutenção inadiável de casa/carro</li>
-                  </ul>
-                </div>
-                <div className="bg-blue-50 border border-blue-200 text-blue-900 rounded p-1.5 text-[9px] font-semibold mt-2">
-                  🔒 Onde investir: <strong>Tesouro Selic</strong> ou <strong>CDB 100% CDI</strong> com liquidez diária.
-                </div>
-              </div>
-
-              {/* Tabela de Exemplos Reais (Exata da imagem!) */}
-              <div className="md:col-span-7 bg-white rounded-lg p-2.5 border border-slate-200 shadow-sm flex flex-col justify-between">
-                <div className="flex items-center justify-between mb-1.5">
-                  <div className="flex items-center gap-1.5 font-black text-emerald-900">
-                    <span className="w-4 h-4 rounded-full bg-emerald-600 text-white text-[10px] flex items-center justify-center">3</span>
-                    <span className="font-extrabold text-[11px]">QUANTO GUARDAR (6 A 12 MESES)</span>
-                  </div>
-                  <span className="text-[9px] font-bold text-slate-500">Exemplos em Reais</span>
-                </div>
-
-                <div className="overflow-x-auto">
-                  <table className="w-full text-[9px] sm:text-[10px] text-left border-collapse">
-                    <thead>
-                      <tr className="bg-slate-100 text-slate-700 font-bold">
-                        <th className="p-1 rounded-l">Custo Mensal</th>
-                        <th className="p-1">Reserva (6 meses)</th>
-                        <th className="p-1 rounded-r">Reserva (12 meses)</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100 text-slate-800">
-                      <tr>
-                        <td className="p-1 font-semibold">R$ 2.000</td>
-                        <td className="p-1 text-emerald-700 font-bold">R$ 12.000</td>
-                        <td className="p-1 text-blue-700 font-bold">R$ 24.000</td>
-                      </tr>
-                      <tr>
-                        <td className="p-1 font-semibold">R$ 3.000</td>
-                        <td className="p-1 text-emerald-700 font-bold">R$ 18.000</td>
-                        <td className="p-1 text-blue-700 font-bold">R$ 36.000</td>
-                      </tr>
-                      <tr>
-                        <td className="p-1 font-semibold">R$ 5.000</td>
-                        <td className="p-1 text-emerald-700 font-bold">R$ 30.000</td>
-                        <td className="p-1 text-blue-700 font-bold">R$ 60.000</td>
-                      </tr>
-                      <tr>
-                        <td className="p-1 font-semibold">R$ 10.000</td>
-                        <td className="p-1 text-emerald-700 font-bold">R$ 60.000</td>
-                        <td className="p-1 text-blue-700 font-bold">R$ 120.000</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-                <div className="mt-2 bg-rose-50 border border-rose-200 text-rose-800 rounded p-1 text-[9px] font-bold flex items-center justify-between">
-                  <span>⛔ NUNCA use a reserva para: viagens, promoções ou apostas.</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom Rule */}
-            <div className="bg-emerald-50 border border-emerald-300 text-emerald-950 p-1.5 rounded-lg text-[9px] font-bold flex items-center justify-between">
-              <span>RESUMO: Liquidez diária imediata + risco zero. Seu sono tranquilo vale mais que rendimento arriscado.</span>
-            </div>
-          </div>
-        );
+        return <Mapa002ReservaEmergencia />;
 
       // ══════════════════════════════════════════════════════════════════════
       // PRANCHA 3: ORÇAMENTO PESSOAL (MAPA 003)
@@ -842,7 +801,12 @@ export const NeuromapBoard: React.FC<NeuromapBoardProps> = ({
 
   return (
     <div 
-      className={`relative w-full aspect-[16/10] bg-white rounded-2xl shadow-xl overflow-hidden cursor-pointer group border border-purple-100/60 ${className}`}
+      ref={containerRef}
+      className={`relative w-full aspect-[16/10] bg-white rounded-2xl shadow-xl overflow-hidden cursor-pointer group border border-purple-100/60 transition-all duration-700 ease-out transform ${
+        isInView 
+          ? 'opacity-100 translate-y-0 scale-100' 
+          : 'opacity-0 translate-y-6 scale-[0.98]'
+      } ${className}`}
       onClick={onExpand}
     >
       {renderBoardContent()}

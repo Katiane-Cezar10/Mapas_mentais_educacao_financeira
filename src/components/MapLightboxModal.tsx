@@ -104,7 +104,7 @@ export const MapLightboxModal: React.FC<MapLightboxModalProps> = ({
             {prevBoard && (
               <button
                 onClick={() => onSelectBoard(prevBoard)}
-                className="px-3 py-1.5 text-xs font-bold rounded-lg border border-purple-500/40 text-purple-200 hover:bg-purple-900/50 transition-colors"
+                className="px-3 py-1.5 text-xs font-bold rounded-lg border border-purple-500/40 text-purple-200 hover:bg-purple-900/50 hover:text-white transition-all duration-200 ease-out hover:scale-105 active:scale-95 cursor-pointer"
               >
                 ← {prevBoard.code}
               </button>
@@ -112,7 +112,7 @@ export const MapLightboxModal: React.FC<MapLightboxModalProps> = ({
             {nextBoard && (
               <button
                 onClick={() => onSelectBoard(nextBoard)}
-                className="px-3 py-1.5 text-xs font-bold rounded-lg border border-purple-500/40 text-purple-200 hover:bg-purple-900/50 transition-colors"
+                className="px-3 py-1.5 text-xs font-bold rounded-lg border border-purple-500/40 text-purple-200 hover:bg-purple-900/50 hover:text-white transition-all duration-200 ease-out hover:scale-105 active:scale-95 cursor-pointer"
               >
                 {nextBoard.code} →
               </button>

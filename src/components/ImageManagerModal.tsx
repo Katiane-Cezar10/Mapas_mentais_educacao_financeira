@@ -43,6 +43,41 @@ export const ImageManagerModal: React.FC<ImageManagerModalProps> = ({
 
   if (!isOpen) return null;
 
+  const compressImage = (dataUrl: string): Promise<string> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        const MAX_WIDTH = 2000;
+        const MAX_HEIGHT = 2000;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > MAX_WIDTH || height > MAX_HEIGHT) {
+          if (width > height) {
+            height = Math.round((height * MAX_WIDTH) / width);
+            width = MAX_WIDTH;
+          } else {
+            width = Math.round((width * MAX_HEIGHT) / height);
+            height = MAX_HEIGHT;
+          }
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', 0.92));
+        } else {
+          resolve(dataUrl);
+        }
+      };
+      img.onerror = () => resolve(dataUrl);
+      img.src = dataUrl;
+    });
+  };
+
   const handleFileUpload = (
     file: File,
     onSuccess: (url: string) => void
@@ -53,8 +88,11 @@ export const ImageManagerModal: React.FC<ImageManagerModalProps> = ({
     }
     const reader = new FileReader();
     reader.onload = async (e) => {
-      const result = e.target?.result as string;
-      if (result) {
+      const rawResult = e.target?.result as string;
+      if (rawResult) {
+        // Otimiza a resolução mantendo nitidez máxima
+        const result = await compressImage(rawResult);
+
         // Tentar salvar no servidor de arquivos para manter leve e permanente
         try {
           const res = await fetch('/api/upload', {
@@ -76,9 +114,9 @@ export const ImageManagerModal: React.FC<ImageManagerModalProps> = ({
         } catch (uploadErr) {
           console.warn('Fallback para DataURL local:', uploadErr);
         }
-        // Fallback caso upload em disco falhe
+        // Fallback para IndexedDB / DataURL local
         onSuccess(result);
-        showToast('Foto carregada com sucesso!');
+        showToast('Foto carregada e fixada com sucesso!');
       }
     };
     reader.readAsDataURL(file);
@@ -314,6 +352,36 @@ export const ImageManagerModal: React.FC<ImageManagerModalProps> = ({
                   onImageChange={(url) => setLocalConfig((p) => ({ ...p, comboDigital: url }))}
                   onFileUpload={handleFileUpload}
                   label="Foto Versão Digital"
+                />
+              </div>
+
+              {/* 4. Ecossistema Completo / Showcase Multi-Dispositivos */}
+              <div className="p-5 rounded-2xl bg-[#1A0735] border border-cyan-500/40 space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-sm font-black text-white flex items-center gap-2">
+                      <span>⚡</span> Foto do Ecossistema Multi-Dispositivos (MoneyMap Showcase)
+                    </h3>
+                    <p className="text-xs text-purple-300">
+                      Foto de destaque com Tablet, Smartphone e Pranchas completas, demonstrando o aprendizado rápido sem aulas longas.
+                    </p>
+                  </div>
+                  {localConfig.bundleShowcase ? (
+                    <span className="text-[10px] font-black bg-emerald-950 border border-emerald-500/40 text-emerald-300 px-2.5 py-1 rounded-full">
+                      ✓ Foto Personalizada Ativa
+                    </span>
+                  ) : (
+                    <span className="text-[10px] font-bold bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 px-2.5 py-1 rounded-full">
+                      Padrão 3D Oficial
+                    </span>
+                  )}
+                </div>
+
+                <ImageUploadRow
+                  currentImage={localConfig.bundleShowcase}
+                  onImageChange={(url) => setLocalConfig((p) => ({ ...p, bundleShowcase: url }))}
+                  onFileUpload={handleFileUpload}
+                  label="Foto Ecossistema Multi-Dispositivos"
                 />
               </div>
             </div>

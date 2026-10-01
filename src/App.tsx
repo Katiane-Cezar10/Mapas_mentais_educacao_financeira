@@ -7,11 +7,15 @@ import { UpgradeDialog } from './components/UpgradeDialog';
 import { MapLightboxModal } from './components/MapLightboxModal';
 import { LegalModal } from './components/LegalModals';
 import { ImageManagerModal } from './components/ImageManagerModal';
-import { getStoredImages, saveStoredImages, CustomImagesConfig } from './data/customImagesStore';
+import { TrustBadges } from './components/TrustBadges';
+import { getStoredImages, initStoredImages, saveStoredImages, CustomImagesConfig } from './data/customImagesStore';
 
-// Fotos dos combos geradas
+// Fotos dos combos e vitrines visuais
 import comboBundleImg from './assets/images/mind_maps_combo_bundle_1790724777833.jpg';
 import comboPrintedImg from './assets/images/mind_maps_printed_combo_1790724790856.jpg';
+import moneymapEcosystemImg from './assets/maps/moneymap-ecossistema-completo.png';
+import learningWithoutClassesImg from './assets/images/learning_without_classes_1790768686311.jpg';
+import mobileQuickLearningImg from './assets/images/mobile_quick_learning_1790768696715.jpg';
 
 // =========================================================================
 // CONFIGURAÇÕES DO PRODUTO & LINKS DE CHECKOUT (EDITE AQUI)
@@ -38,6 +42,11 @@ export default function App() {
 
   // Garante que fotos adicionadas pelo usuário permaneçam sempre sincronizadas e fixadas
   React.useEffect(() => {
+    // Carrega do IndexedDB com capacidade ilimitada para fotos de alta resolução
+    initStoredImages((loaded) => {
+      setCustomImages({ ...loaded });
+    });
+
     const handleSync = () => {
       setCustomImages(getStoredImages());
     };
@@ -91,6 +100,82 @@ export default function App() {
     saveStoredImages(newConfig);
     setCheckoutNotice('🎉 Suas fotos foram salvas e publicadas na landing page!');
     setTimeout(() => setCheckoutNotice(null), 5000);
+  };
+
+  // Upload rápido e direto da foto do ecossistema MoneyMap
+  const handleShowcaseUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const dataUrl = reader.result as string;
+      let finalUrl = dataUrl;
+
+      try {
+        const uploadRes = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            filename: `${Date.now()}_${file.name}`,
+            dataUrl,
+          }),
+        });
+        if (uploadRes.ok) {
+          const json = await uploadRes.json();
+          if (json.url) {
+            finalUrl = json.url;
+          }
+        }
+      } catch (err) {
+        console.warn('Fallback para IndexedDB:', err);
+      }
+
+      const newConfig: CustomImagesConfig = {
+        ...customImages,
+        bundleShowcase: finalUrl,
+      };
+      setCustomImages(newConfig);
+      saveStoredImages(newConfig);
+      setCheckoutNotice('Foto do ecossistema MoneyMap atualizada com sucesso!');
+      setTimeout(() => setCheckoutNotice(null), 3500);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handlePranchasShowcaseUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const dataUrl = reader.result as string;
+      let finalUrl = dataUrl;
+
+      try {
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ filename: `${Date.now()}_${file.name}`, dataUrl }),
+        });
+        if (res.ok) {
+          const json = await res.json();
+          if (json.url) finalUrl = json.url;
+        }
+      } catch (err) {
+        console.warn('Fallback para cache local');
+      }
+
+      const newConfig: CustomImagesConfig = {
+        ...customImages,
+        pranchasShowcase: finalUrl,
+      };
+      setCustomImages(newConfig);
+      saveStoredImages(newConfig);
+      setCheckoutNotice('Foto da seção "Navegue pelas pranchas oficiais" atualizada com sucesso!');
+      setTimeout(() => setCheckoutNotice(null), 3500);
+    };
+    reader.readAsDataURL(file);
   };
 
   const currentActiveBoard = ATTACHED_MAPS_LIST.find((b) => b.id === activeBoardTab) || ATTACHED_MAPS_LIST[0];
@@ -157,102 +242,173 @@ export default function App() {
             <strong className="text-white font-bold">Esqueça as planilhas chatas e vídeos teóricos de 40 horas.</strong> Tenha um mapa mental colorido na mão para cada decisão: do corte de despesas invisíveis ao primeiro investimento em renda fixa.
           </p>
 
-          {/* FOTO DO COMBO DO PRODUTO (3D BUNDLE MOCKUP) + MAPA INTERATIVO */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center my-8 max-w-5xl mx-auto">
-            
-            {/* Foto do Combo do Produto (Hero) */}
-            <div className="lg:col-span-7 relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-500 rounded-3xl blur-lg opacity-40 group-hover:opacity-75 transition duration-500" />
-              <div className="relative bg-[#180630] rounded-2xl overflow-hidden border-2 border-purple-500/40 shadow-2xl">
-                
-                {/* Faixa superior do combo */}
-                <div className="p-3 bg-[#120322] border-b border-purple-500/30 flex items-center justify-between">
-                  <span className="text-[11px] font-black text-cyan-300 flex items-center gap-1.5 uppercase tracking-wider">
-                    <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                    COMBO COMPLETO DE MAPAS MENTAIS
-                  </span>
-                  <span className="text-[10px] font-bold text-purple-300 bg-purple-900/60 border border-purple-500/30 px-2.5 py-0.5 rounded-full">
-                    Material Digital & Pranchas Impressas
+          {/* ECOSSISTEMA COMPLETO MONEYMAP - NO TOPO DA PÁGINA LOGO APÓS O TÍTULO */}
+          <div className="my-8 max-w-5xl mx-auto text-left">
+            <div className="glass-tech-purple rounded-3xl p-3 sm:p-5 border-2 border-purple-400/40 shadow-[0_0_40px_rgba(168,85,247,0.25)] relative group overflow-hidden">
+              
+              {/* Badges superiores flutuantes */}
+              <div className="flex flex-wrap items-center justify-between gap-2 p-3 sm:p-4 mb-2 bg-[#1A0735]/90 rounded-2xl border border-purple-500/30">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+                  <span className="text-xs sm:text-sm font-black text-white">
+                    Ecossistema Completo MoneyMap
                   </span>
                 </div>
-
-                <img 
-                  src={customImages.comboHero || comboPrintedImg} 
-                  alt="Combo Mapas do Dinheiro - 30 Mapas Mentais + 5 Bônus" 
-                  className="w-full h-auto object-cover transform group-hover:scale-[1.01] transition-transform duration-500"
-                />
-
-                <div className="bg-gradient-to-t from-[#0A0116] via-[#0A0116]/90 to-transparent p-4 flex items-center justify-between text-xs">
-                  <span className="font-black text-purple-200 flex items-center gap-1.5">
-                    <span className="text-[#06B6D4]">★</span> COLEÇÃO COMPLETA: FINANÇAS PESSOAIS & INVESTIMENTOS
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-[10px] sm:text-xs font-bold text-cyan-300 bg-cyan-950/80 border border-cyan-500/40 px-2.5 py-0.5 rounded-full">
+                    📱 Tablet + Celular + Folhas A4
                   </span>
-                  <span className="text-[11px] font-bold text-amber-300 bg-purple-950/80 px-2.5 py-0.5 rounded border border-purple-500/40">
-                    30 Mapas + 5 Bônus
+                  <span className="text-[10px] sm:text-xs font-bold text-amber-300 bg-amber-950/80 border border-amber-500/40 px-2.5 py-0.5 rounded-full">
+                    ⏱️ Domine em 5 Minutos
                   </span>
+                  <label className="cursor-pointer text-[10px] sm:text-xs font-black text-slate-950 bg-gradient-to-r from-[#06B6D4] to-[#22D3EE] hover:brightness-110 px-3 py-1 rounded-full shadow-md flex items-center gap-1.5 transition-all active:scale-95 border border-cyan-300">
+                    <span>📷 Trocar por Foto Anexa</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleShowcaseUpload}
+                    />
+                  </label>
                 </div>
               </div>
-            </div>
 
-            {/* Amostra da Prancha Oficial de Mapa Mental */}
-            <div className="lg:col-span-5 text-left">
-              <div className="glass-tech-purple rounded-2xl p-4 border border-purple-400/30 tech-neon-glow">
-                <div className="flex items-center justify-between pb-2 mb-2 border-b border-purple-500/20">
-                  <div className="flex items-center gap-1.5">
-                    <button
-                      onClick={() => setHeroBoardId(2)}
-                      className={`text-[10px] sm:text-xs font-black px-3 py-1.5 rounded-lg transition-all ${
-                        heroBoardId === 2
-                          ? 'bg-[#06B6D4] text-slate-950 shadow-sm font-extrabold'
-                          : 'text-purple-300 hover:text-white bg-purple-900/40'
-                      }`}
-                    >
-                      MAPA 002: Reserva de Emergência
-                    </button>
-                    <button
-                      onClick={() => setHeroBoardId(1)}
-                      className={`text-[10px] sm:text-xs font-black px-3 py-1.5 rounded-lg transition-all ${
-                        heroBoardId === 1
-                          ? 'bg-[#A855F7] text-white shadow-sm font-extrabold'
-                          : 'text-purple-300 hover:text-white bg-purple-900/40'
-                      }`}
-                    >
-                      MAPA 001: Finanças Pessoais
-                    </button>
+              {/* Imagem do Showcase Multi-Dispositivo com o Anexo 1 */}
+              <div className="rounded-2xl overflow-hidden relative">
+                <img 
+                  src={
+                    (customImages.bundleShowcase && customImages.bundleShowcase.startsWith('/uploads/') && !customImages.bundleShowcase.includes('08_38_35'))
+                      ? customImages.bundleShowcase 
+                      : moneymapEcosystemImg
+                  } 
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = moneymapEcosystemImg;
+                  }}
+                  alt="Ecossistema MoneyMap - 30 Mapas Mentais completos em Tablet, Smartphone e Pranchas Impressas" 
+                  className="w-full h-auto object-cover rounded-2xl transform group-hover:scale-[1.01] transition-transform duration-700"
+                />
+              </div>
+
+              {/* Faixa inferior de síntese neuro-visual */}
+              <div className="mt-4 p-4 rounded-2xl bg-gradient-to-r from-purple-950/90 via-[#19062E] to-purple-950/90 border border-purple-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-purple-600/30 border border-purple-400/40 flex items-center justify-center text-xl shrink-0">
+                    🧠
                   </div>
-                  <button 
-                    onClick={() => setSelectedBoard(currentHeroBoard)}
-                    className="text-[11px] font-bold text-cyan-300 hover:text-white underline flex items-center gap-1"
+                  <div>
+                    <h4 className="text-sm font-black text-white">
+                      Por que o cérebro absorve tão rápido?
+                    </h4>
+                    <p className="text-xs text-purple-200/80">
+                      O cérebro humano processa elementos visuais e ícones 60.000 vezes mais rápido que blocos de texto ou planilhas.
+                    </p>
+                  </div>
+                </div>
+                <a
+                  href="#planos"
+                  className="px-5 py-2.5 rounded-xl bg-[#06B6D4] hover:bg-[#22D3EE] text-slate-950 text-xs font-black uppercase tracking-wider transition-all shrink-0 shadow-lg shadow-cyan-500/20"
+                >
+                  Garantir Meus Mapas →
+                </a>
+              </div>
+
+            </div>
+          </div>
+
+          {/* Amostra Rápida Interativa de Pranchas Oficiais */}
+          <div className="max-w-4xl mx-auto my-6 text-left">
+            <div className="glass-tech-purple rounded-2xl p-4 border border-purple-400/30 tech-neon-glow">
+              <div className="flex items-center justify-between pb-2 mb-2 border-b border-purple-500/20">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <button
+                    onClick={() => setHeroBoardId(2)}
+                    className={`text-[10px] sm:text-xs font-black px-2.5 py-1.5 rounded-lg transition-all duration-200 ease-out hover:scale-105 active:scale-95 cursor-pointer ${
+                      heroBoardId === 2
+                        ? 'bg-[#06B6D4] text-slate-950 shadow-sm font-extrabold scale-105'
+                        : 'text-purple-300 hover:text-white bg-purple-900/40 hover:bg-purple-800/60'
+                    }`}
                   >
-                    🔍 Ampliar
+                    MAPA 002: Reserva
+                  </button>
+                  <button
+                    onClick={() => setHeroBoardId(3)}
+                    className={`text-[10px] sm:text-xs font-black px-2.5 py-1.5 rounded-lg transition-all duration-200 ease-out hover:scale-105 active:scale-95 cursor-pointer ${
+                      heroBoardId === 3
+                        ? 'bg-[#06B6D4] text-slate-950 shadow-sm font-extrabold scale-105'
+                        : 'text-purple-300 hover:text-white bg-purple-900/40 hover:bg-purple-800/60'
+                    }`}
+                  >
+                    MAPA 003: Orçamento
+                  </button>
+                  <button
+                    onClick={() => setHeroBoardId(4)}
+                    className={`text-[10px] sm:text-xs font-black px-2.5 py-1.5 rounded-lg transition-all duration-200 ease-out hover:scale-105 active:scale-95 cursor-pointer ${
+                      heroBoardId === 4
+                        ? 'bg-[#06B6D4] text-slate-950 shadow-sm font-extrabold scale-105'
+                        : 'text-purple-300 hover:text-white bg-purple-900/40 hover:bg-purple-800/60'
+                    }`}
+                  >
+                    MAPA 004: Dívidas
+                  </button>
+                  <button
+                    onClick={() => setHeroBoardId(5)}
+                    className={`text-[10px] sm:text-xs font-black px-2.5 py-1.5 rounded-lg transition-all duration-200 ease-out hover:scale-105 active:scale-95 cursor-pointer ${
+                      heroBoardId === 5
+                        ? 'bg-[#06B6D4] text-slate-950 shadow-sm font-extrabold scale-105'
+                        : 'text-purple-300 hover:text-white bg-purple-900/40 hover:bg-purple-800/60'
+                    }`}
+                  >
+                    MAPA 005: Patrimônio
+                  </button>
+                  <button
+                    onClick={() => setHeroBoardId(1)}
+                    className={`text-[10px] sm:text-xs font-black px-2.5 py-1.5 rounded-lg transition-all duration-200 ease-out hover:scale-105 active:scale-95 cursor-pointer ${
+                      heroBoardId === 1
+                        ? 'bg-[#A855F7] text-white shadow-sm font-extrabold scale-105'
+                        : 'text-purple-300 hover:text-white bg-purple-900/40 hover:bg-purple-800/60'
+                    }`}
+                  >
+                    MAPA 001
                   </button>
                 </div>
-                
-                <div 
-                  className="cursor-pointer overflow-hidden rounded-xl shadow-lg hover:ring-2 hover:ring-cyan-400 transition-all bg-white"
+                <button 
                   onClick={() => setSelectedBoard(currentHeroBoard)}
+                  className="text-[11px] font-bold text-cyan-300 hover:text-white underline flex items-center gap-1"
                 >
-                  <NeuromapBoard
-                    boardId={currentHeroBoard.id}
-                    customImage={customImages.maps[currentHeroBoard.id]}
-                    onExpand={() => setSelectedBoard(currentHeroBoard)}
-                  />
-                </div>
-                <p className="text-[11px] text-purple-300 mt-2 text-center font-medium">
-                  {currentHeroBoard.code} — {currentHeroBoard.title}: Toque para ver em alta definição
-                </p>
+                  🔍 Ampliar
+                </button>
               </div>
+              
+              <div 
+                className="cursor-pointer overflow-hidden rounded-xl shadow-lg hover:ring-2 hover:ring-cyan-400 transition-all bg-white"
+                onClick={() => setSelectedBoard(currentHeroBoard)}
+              >
+                <NeuromapBoard
+                  key={`hero-board-${currentHeroBoard.id}`}
+                  boardId={currentHeroBoard.id}
+                  customImage={customImages.maps[currentHeroBoard.id]}
+                  onExpand={() => setSelectedBoard(currentHeroBoard)}
+                />
+              </div>
+              <p className="text-[11px] text-purple-300 mt-2 text-center font-medium">
+                {currentHeroBoard.code} — {currentHeroBoard.title}: Toque para ver em alta definição
+              </p>
             </div>
-
           </div>
 
           {/* CTA Principal de Alta Conversão */}
-          <div className="pt-2 max-w-md mx-auto">
+          <div className="pt-2 max-w-lg mx-auto">
             <a 
               href="#planos"
               className="w-full inline-block py-4 px-8 btn-tech-hot btn-tech-pulse text-base sm:text-lg font-black uppercase tracking-wider"
             >
               QUERO OS MAPAS MENTAIS AGORA →
             </a>
+            
+            {/* Selos de Confiança abaixo do botão de compra do Hero */}
+            <TrustBadges variant="inline" />
+
             <div className="flex items-center justify-center gap-4 text-xs text-purple-300/80 mt-3 font-medium">
               <span>✓ Acesso Imediato</span>
               <span>•</span>
@@ -276,52 +432,12 @@ export default function App() {
               TECNOLOGIA VISUAL DE APRENDIZADO
             </span>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#1E0836] tracking-tight">
-              Navegue pelas pranchas oficiais por dentro
+              Carrossel de Mapas Mentais
             </h2>
             <p className="text-sm sm:text-base text-slate-600 mt-2">
-              Veja as pranchas originais em alta definição. Selecione uma prancha abaixo ou toque no carrossel para ampliar:
+              Deslize pelas pranchas ou toque em qualquer mapa para inspecionar em tela cheia com alta resolução:
             </p>
           </header>
-
-          {/* Seletor Interativo das 5 Pranchas Oficiais */}
-          <div className="flex flex-wrap items-center justify-center gap-2 mb-8 max-w-4xl mx-auto">
-            {ATTACHED_MAPS_LIST.map((board) => (
-              <button
-                key={board.id}
-                onClick={() => setActiveBoardTab(board.id)}
-                className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-2 border ${
-                  activeBoardTab === board.id
-                    ? 'bg-[#1E0836] text-white border-purple-400 shadow-[0_0_15px_rgba(168,85,247,0.4)] scale-105'
-                    : 'bg-white text-purple-900 border-purple-200 hover:border-purple-400 hover:bg-purple-50'
-                }`}
-              >
-                <span className="font-mono bg-purple-500/20 text-purple-400 px-1.5 py-0.5 rounded text-[10px]">
-                  {board.code}
-                </span>
-                <span>{board.title}</span>
-              </button>
-            ))}
-          </div>
-
-          {/* Prancha Oficial em Destaque Grande */}
-          <div className="max-w-4xl mx-auto mb-10">
-            <div className="rounded-2xl border border-purple-200 shadow-2xl overflow-hidden bg-white">
-              <NeuromapBoard
-                boardId={currentActiveBoard.id}
-                customImage={customImages.maps[currentActiveBoard.id]}
-                onExpand={() => setSelectedBoard(currentActiveBoard)}
-              />
-            </div>
-            <div className="mt-3 flex flex-wrap items-center justify-between gap-2 px-2 text-xs text-purple-950 font-bold">
-              <span>📌 <strong>{currentActiveBoard.code}:</strong> {currentActiveBoard.subtitle}</span>
-              <button
-                onClick={() => setSelectedBoard(currentActiveBoard)}
-                className="text-purple-700 hover:text-purple-950 underline flex items-center gap-1 font-black"
-              >
-                🔍 Toque para ver em tela cheia com alta resolução
-              </button>
-            </div>
-          </div>
 
           {/* Carrossel Duplo em Movimento Contínuo */}
           <ContinuousMarquee 
@@ -336,6 +452,204 @@ export default function App() {
             >
               Liberar a coleção completa de 30 mapas mentais no checkout →
             </a>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          NOVA SEÇÃO: APRENDA FINANÇAS EM MINUTOS — SEM AULAS LONGAS E CANSATIVAS
+      ════════════════════════════════════════════════════════════════════ */}
+      <section className="py-16 sm:py-24 bg-gradient-to-b from-[#090114] via-[#150426] to-[#0E021F] text-white border-b border-purple-500/20 relative overflow-hidden" id="metodologia">
+        
+        {/* Glows de ambiente neon */}
+        <div className="absolute left-1/4 top-10 w-96 h-96 bg-purple-600/20 blur-[130px] rounded-full pointer-events-none" />
+        <div className="absolute right-1/4 bottom-10 w-96 h-96 bg-cyan-600/15 blur-[130px] rounded-full pointer-events-none" />
+
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+          
+          {/* Cabeçalho de Alto Impacto */}
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <span className="text-xs font-black uppercase tracking-widest text-[#06B6D4] bg-cyan-950/80 border border-cyan-500/40 px-4 py-1 rounded-full inline-block mb-3 shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+              ⚡ O FIM DAS AULAS TEÓRICAS DE 60 HORAS
+            </span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight">
+              Aprenda finanças em <span className="bg-gradient-to-r from-[#FFC94D] via-[#F472B6] to-[#06B6D4] bg-clip-text text-transparent">5 minutos</span>, não em semanas de aulas cansativas
+            </h2>
+            <p className="text-sm sm:text-base text-purple-200/90 mt-4 leading-relaxed font-body">
+              Você já tentou assistir a cursos com dezenas de horas ou preencher planilhas cheias de fórmulas que travam a mente? A neurociência explica por que 88% das pessoas desistem: o cérebro rejeita sobrecarga teórica. Com o método visual, você bate o olho e age imediatamente.
+            </p>
+          </div>
+
+          {/* Destaque: Grid com 2 Fotos de Aplicação na Vida Real */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 items-stretch">
+            
+            {/* Card com Foto 1: Estudo Tranquilo sem Aulas Cansativas */}
+            <div className="glass-tech-purple rounded-3xl p-6 border border-purple-400/30 flex flex-col justify-between shadow-xl">
+              <div>
+                <div className="rounded-2xl overflow-hidden border border-purple-400/30 mb-5 relative group">
+                  <img 
+                    src={learningWithoutClassesImg} 
+                    alt="Pessoa estudando finanças de forma rápida com mapas impressos e café" 
+                    className="w-full h-64 object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute top-3 left-3 bg-[#0A0116]/85 backdrop-blur-md px-3 py-1 rounded-full border border-purple-500/40 text-[11px] font-black text-[#FFC94D] flex items-center gap-1.5">
+                    <span>☕</span> ESTUDO SEM ESTRESSE
+                  </div>
+                  <div className="absolute bottom-3 right-3 bg-purple-950/90 backdrop-blur-md px-2.5 py-0.5 rounded-md text-[10px] font-bold text-purple-200 border border-purple-500/40">
+                    0 Aulas Longas · 100% Visual
+                  </div>
+                </div>
+
+                <h3 className="text-xl font-black text-white mb-2">
+                  1 Prancha Visual = Semanas de Vídeo-Aulas
+                </h3>
+                <p className="text-xs sm:text-sm text-purple-200/85 leading-relaxed font-body mb-4">
+                  Cursos comuns enrolam com introduções intermináveis e fórmulas difíceis. Com os Mapas do Dinheiro, cada tema tem início, meio e fim em uma única página diagramada. Você senta com uma xícara de café e em 5 minutos domina o que levaria semanas para compreender.
+                </p>
+
+                <ul className="text-xs text-purple-100 space-y-2 mb-4 font-medium">
+                  <li className="flex items-center gap-2">
+                    <span className="text-emerald-400 font-bold">✓</span> Elimina a procrastinação e o medo de mexer no dinheiro
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-emerald-400 font-bold">✓</span> Passo a passo numerado de 1 a 8 pronto para agir hoje
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-emerald-400 font-bold">✓</span> Perfeito para quem tem rotina corrida e pouco tempo
+                  </li>
+                </ul>
+              </div>
+
+              <div className="pt-4 border-t border-purple-500/20 flex items-center justify-between text-xs text-purple-300">
+                <span className="font-semibold">Sem termos em inglês difíceis</span>
+                <span className="font-black text-cyan-300">Linguagem 100% Simples</span>
+              </div>
+            </div>
+
+            {/* Card com Foto 2: Consulta Imediata na Palma da Mão */}
+            <div className="glass-tech-purple rounded-3xl p-6 border border-purple-400/30 flex flex-col justify-between shadow-xl">
+              <div>
+                <div className="rounded-2xl overflow-hidden border border-purple-400/30 mb-5 relative group">
+                  <img 
+                    src={mobileQuickLearningImg} 
+                    alt="Uso do mapa mental no smartphone em 30 segundos no dia a dia" 
+                    className="w-full h-64 object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute top-3 left-3 bg-[#0A0116]/85 backdrop-blur-md px-3 py-1 rounded-full border border-purple-500/40 text-[11px] font-black text-cyan-300 flex items-center gap-1.5">
+                    <span>📱</span> CONSULTA EM 30 SEGUNDOS
+                  </div>
+                  <div className="absolute bottom-3 right-3 bg-purple-950/90 backdrop-blur-md px-2.5 py-0.5 rounded-md text-[10px] font-bold text-purple-200 border border-purple-500/40">
+                    Acesso Rápido no Celular
+                  </div>
+                </div>
+
+                <h3 className="text-xl font-black text-white mb-2">
+                  Decisões Seguras Antes de Gastar ou Investir
+                </h3>
+                <p className="text-xs sm:text-sm text-purple-200/85 leading-relaxed font-body mb-4">
+                  Surgiu uma dúvida no mercado, na fila do banco ou antes de fechar um parcelamento? Em vez de tentar lembrar o que um professor falou num vídeo de 50 minutos, abra o PDF no celular e confira a regra visual exata em menos de meio minuto.
+                </p>
+
+                <ul className="text-xs text-purple-100 space-y-2 mb-4 font-medium">
+                  <li className="flex items-center gap-2">
+                    <span className="text-cyan-400 font-bold">✓</span> Resposta imediata para decisões financeiras no dia a dia
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-cyan-400 font-bold">✓</span> Funciona offline, direto nos seus arquivos ou WhatsApp
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="text-cyan-400 font-bold">✓</span> Diagramação nítida com zoom em alta resolução sem perda
+                  </li>
+                </ul>
+              </div>
+
+              <div className="pt-4 border-t border-purple-500/20 flex items-center justify-between text-xs text-purple-300">
+                <span className="font-semibold">Sempre no seu bolso</span>
+                <span className="font-black text-emerald-300">Proteção Anti-Impulso</span>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Destaque 3: Tabela Comparativa Visual (Cursos Longos vs. Mapas do Dinheiro) */}
+          <div className="glass-tech-purple rounded-3xl p-6 sm:p-8 border-2 border-purple-400/30 shadow-2xl">
+            <div className="text-center max-w-xl mx-auto mb-8">
+              <span className="text-xs font-black uppercase tracking-wider text-purple-300 bg-purple-900/60 border border-purple-500/30 px-3 py-0.5 rounded-full">
+                COMPARAÇÃO DIRETA
+              </span>
+              <h3 className="text-xl sm:text-2xl font-black text-white mt-2">
+                Cursos Longos Tradicionais vs. Método MoneyMap
+              </h3>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              
+              {/* Lado Esquerdo: O jeito antigo e exaustivo */}
+              <div className="rounded-2xl p-5 bg-rose-950/30 border border-rose-500/30 space-y-3">
+                <div className="flex items-center gap-2 pb-2 border-b border-rose-500/30">
+                  <span className="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 font-black text-xs flex items-center justify-center">✕</span>
+                  <h4 className="text-sm font-black text-rose-200">Cursos Tradicionais de Finanças</h4>
+                </div>
+                <ul className="text-xs text-rose-100/90 space-y-2.5">
+                  <li className="flex items-start gap-2">
+                    <span className="text-rose-400 font-bold shrink-0">✕</span>
+                    <span><strong>40 a 80 horas de vídeo</strong> difíceis de encaixar na rotina de quem trabalha.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-rose-400 font-bold shrink-0">✕</span>
+                    <span><strong>Planilhas gigantescas de Excel</strong> que travam e ninguém atualiza.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-rose-400 font-bold shrink-0">✕</span>
+                    <span><strong>Jargões do mercado financeiro</strong> que dão sensação de incapacidade.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-rose-400 font-bold shrink-0">✕</span>
+                    <span><strong>Preço alto</strong>: costumam custar entre R$ 297,00 e R$ 997,00.</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Lado Direito: A revolução neuro-visual */}
+              <div className="rounded-2xl p-5 bg-emerald-950/40 border-2 border-emerald-400/50 space-y-3 shadow-[0_0_25px_rgba(16,185,129,0.15)]">
+                <div className="flex items-center gap-2 pb-2 border-b border-emerald-500/30">
+                  <span className="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-300 font-black text-xs flex items-center justify-center">✓</span>
+                  <h4 className="text-sm font-black text-emerald-200">Método Visual Mapas do Dinheiro</h4>
+                </div>
+                <ul className="text-xs text-emerald-100 space-y-2.5 font-medium">
+                  <li className="flex items-start gap-2">
+                    <span className="text-emerald-400 font-bold shrink-0">✓</span>
+                    <span><strong>5 minutos por mapa</strong>: síntese visual de alto impacto direto ao ponto.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-emerald-400 font-bold shrink-0">✓</span>
+                    <span><strong>Na palma da mão ou impresso</strong>: consulte sem precisar ligar o computador.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-emerald-400 font-bold shrink-0">✓</span>
+                    <span><strong>Passo a passo 1, 2, 3...</strong> com ícones claros para você agir na hora.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-emerald-400 font-bold shrink-0">✓</span>
+                    <span><strong>Preço acessível a todos</strong>: por apenas R$ 15,90 (pagamento único).</span>
+                  </li>
+                </ul>
+              </div>
+
+            </div>
+
+            <div className="mt-6 pt-6 border-t border-purple-500/20 text-center">
+              <a
+                href="#planos"
+                className="inline-flex items-center gap-2 py-4 px-8 btn-tech-hot text-xs sm:text-sm font-black uppercase tracking-wider rounded-2xl shadow-xl"
+              >
+                QUERO APRENDER FINANÇAS DE FORMA RÁPIDA E VISUAL →
+              </a>
+            </div>
+
           </div>
 
         </div>
@@ -452,6 +766,240 @@ export default function App() {
               </div>
             </div>
 
+          </div>
+
+          {/* ═════════════════════════════════════════════════════════════════
+              PARTE ESTÁTICA: NAVEGUE PELAS PRANCHAS OFICIAIS POR DENTRO
+          ══════════════════════════════════════════════════════════════════ */}
+          <div className="mt-16 pt-12 border-t border-purple-500/30" id="amostras-estaticas">
+            <header className="text-center max-w-2xl mx-auto mb-8">
+              <span className="text-xs font-black uppercase tracking-wider text-[#06B6D4] bg-cyan-950/70 border border-cyan-500/40 px-3.5 py-1 rounded-full inline-block mb-2 shadow-sm">
+                TECNOLOGIA VISUAL DE APRENDIZADO
+              </span>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight">
+                Navegue pelas pranchas oficiais por dentro
+              </h2>
+              <p className="text-sm sm:text-base text-purple-200/80 mt-2">
+                Veja o impacto do método neuro-visual na prática: compare o método tradicional com o MoneyMap.
+              </p>
+            </header>
+
+            {/* Infográfico Comparativo em Destaque (Foto Anexa) */}
+            <div className="max-w-5xl mx-auto mb-8">
+              <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-purple-500/20">
+                <span className="text-xs text-purple-200 font-bold flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#06B6D4] animate-ping" />
+                  <span>Por que o cérebro absorve tão rápido? — Sem Mapa Mental vs Com o MoneyMap</span>
+                </span>
+                <label className="cursor-pointer text-[10px] sm:text-xs font-black text-slate-950 bg-gradient-to-r from-[#06B6D4] to-[#22D3EE] hover:brightness-110 px-3.5 py-1.5 rounded-full shadow-md flex items-center gap-1.5 transition-all active:scale-95 border border-cyan-300">
+                  <span>📷 Trocar por Foto Anexa</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handlePranchasShowcaseUpload}
+                  />
+                </label>
+              </div>
+
+              {customImages.pranchasShowcase ? (
+                <div className="rounded-2xl border-2 border-purple-400/40 shadow-[0_0_35px_rgba(168,85,247,0.3)] overflow-hidden bg-[#0A0116]">
+                  <img
+                    src={customImages.pranchasShowcase}
+                    alt="Por que o cérebro absorve tão rápido? Sem Mapa Mental vs Com o MoneyMap"
+                    className="w-full h-auto object-contain cursor-pointer hover:scale-[1.01] transition-transform duration-500"
+                    onClick={() => {
+                      if (typeof window !== 'undefined') {
+                        window.open(customImages.pranchasShowcase, '_blank');
+                      }
+                    }}
+                  />
+                </div>
+              ) : (
+                /* Exibição em alta fidelidade reproduzindo fielmente o anexo */
+                <div className="rounded-3xl border-2 border-purple-500/40 shadow-[0_0_40px_rgba(168,85,247,0.3)] overflow-hidden bg-gradient-to-b from-[#0F0222] via-[#080014] to-[#0A0116] p-4 sm:p-7 relative text-white">
+                  
+                  {/* Top Bar da Imagem Anexa: Por que o cérebro absorve tão rápido? */}
+                  <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#1E0836] via-[#2D0D52] to-[#1E0836] border border-purple-500/40 mb-6 flex items-center gap-4 shadow-xl">
+                    <div className="w-12 h-12 rounded-2xl bg-purple-600/30 border border-purple-400/50 flex items-center justify-center text-3xl shrink-0 shadow-inner">
+                      🧠
+                    </div>
+                    <div>
+                      <h3 className="text-lg sm:text-2xl font-black text-white leading-tight">
+                        Por que o cérebro absorve <span className="bg-gradient-to-r from-[#F472B6] to-[#C084FC] bg-clip-text text-transparent">tão rápido?</span>
+                      </h3>
+                      <p className="text-xs sm:text-sm text-purple-200 font-medium mt-0.5">
+                        O cérebro humano processa elementos visuais e ícones <strong className="text-cyan-300 font-bold">60.000 vezes mais rápido</strong> que blocos de texto ou planilhas.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Comparativo Lado a Lado: Sem Mapa Mental vs Com o MoneyMap */}
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch relative">
+                    
+                    {/* LADO ESQUERDO: SEM MAPA MENTAL */}
+                    <div className="lg:col-span-5 rounded-2xl p-4 sm:p-5 bg-[#140424]/90 border border-rose-500/30 flex flex-col justify-between shadow-lg relative overflow-hidden">
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-rose-500/10 blur-2xl rounded-full pointer-events-none" />
+                      
+                      <div>
+                        {/* Badge de Alerta */}
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-950/80 border border-rose-500/40 text-rose-300 text-xs font-black uppercase tracking-wider mb-4 shadow-sm">
+                          <span>✖</span>
+                          <span>SEM MAPA MENTAL</span>
+                        </div>
+
+                        {/* Simulação da busca confusa no Google */}
+                        <div className="rounded-xl bg-slate-900/90 border border-slate-700/60 p-3.5 mb-4 text-left shadow-inner">
+                          <div className="flex items-center gap-2 mb-2 pb-2 border-b border-slate-700/50">
+                            <span className="text-rose-400 font-bold text-xs">G</span>
+                            <span className="text-amber-400 font-bold text-xs">o</span>
+                            <span className="text-blue-400 font-bold text-xs">o</span>
+                            <span className="text-emerald-400 font-bold text-xs">g</span>
+                            <span className="text-rose-400 font-bold text-xs">l</span>
+                            <span className="text-blue-400 font-bold text-xs">e</span>
+                            <span className="text-xs text-white font-mono ml-2 font-bold">CDB</span>
+                          </div>
+                          <ul className="text-[11px] text-slate-300 space-y-1 font-mono">
+                            <li className="flex items-center gap-1.5 text-slate-400">🔍 o que é CDB</li>
+                            <li className="flex items-center gap-1.5 text-slate-400">🔍 como funciona CDB</li>
+                            <li className="flex items-center gap-1.5 text-slate-400">🔍 qual o melhor CDB</li>
+                            <li className="flex items-center gap-1.5 text-slate-400">🔍 CDB tem risco</li>
+                            <li className="flex items-center gap-1.5 text-slate-400">🔍 como investir em CDB</li>
+                          </ul>
+                        </div>
+
+                        {/* Balões de dúvidas desorganizadas */}
+                        <div className="flex flex-wrap gap-1.5 mb-4">
+                          <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-rose-900/40 border border-rose-700/40 text-rose-200">
+                            Qual o melhor? 🤔
+                          </span>
+                          <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-rose-900/40 border border-rose-700/40 text-rose-200">
+                            Como funciona? 😵
+                          </span>
+                          <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-rose-900/40 border border-rose-700/40 text-rose-200">
+                            Tem risco? 😰
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Lista de dores */}
+                      <ul className="space-y-1.5 text-xs text-rose-200 pt-3 border-t border-rose-500/20 font-medium">
+                        <li className="flex items-center gap-2">
+                          <span className="text-rose-400 font-bold">✖</span> Informações espalhadas em 50 sites
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="text-rose-400 font-bold">✖</span> Difícil de entender e sem resumo prático
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="text-rose-400 font-bold">✖</span> Demora semanas para aprender
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="text-rose-400 font-bold">✖</span> Gera medo e insegurança na hora de agir
+                        </li>
+                      </ul>
+                    </div>
+
+                    {/* SETA CENTRAL DE TRANSFORMAÇÃO */}
+                    <div className="lg:col-span-2 flex flex-col items-center justify-center py-2">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-600 to-cyan-500 p-0.5 shadow-[0_0_20px_rgba(6,182,212,0.5)]">
+                        <div className="w-full h-full rounded-full bg-[#0E021F] flex items-center justify-center text-cyan-300 font-black text-lg">
+                          ➜
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-black uppercase tracking-wider text-purple-300 mt-2 text-center">
+                        Transformação Visual
+                      </span>
+                    </div>
+
+                    {/* LADO DIREITO: COM O MONEYMAP */}
+                    <div className="lg:col-span-5 rounded-2xl p-4 sm:p-5 bg-[#0C1F2B]/90 border-2 border-emerald-400/50 flex flex-col justify-between shadow-[0_0_30px_rgba(16,185,129,0.2)] relative overflow-hidden">
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/15 blur-2xl rounded-full pointer-events-none" />
+
+                      <div>
+                        {/* Badge de Sucesso */}
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-400/50 text-emerald-300 text-xs font-black uppercase tracking-wider mb-4 shadow-sm">
+                          <span>✔</span>
+                          <span>COM O MONEYMAP</span>
+                        </div>
+
+                        {/* Simulação do Mapa 008 + Confirmação no Smartphone */}
+                        <div className="space-y-3 mb-4">
+                          <div className="rounded-xl bg-white text-slate-900 p-3 shadow-md border border-emerald-200">
+                            <div className="flex items-center justify-between pb-1.5 mb-1.5 border-b border-slate-200">
+                              <span className="text-[10px] font-black text-purple-900 font-mono">MAPA 008</span>
+                              <span className="text-[9px] font-bold bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded">PASSO A PASSO</span>
+                            </div>
+                            <h4 className="text-xs font-black text-slate-900">CDB — Certificado de Depósito Bancário</h4>
+                            <p className="text-[10px] text-slate-600 mt-0.5">Entenda como funciona e faça seu primeiro investimento em 5 minutos.</p>
+                          </div>
+
+                          <div className="rounded-xl bg-emerald-950/80 border border-emerald-500/40 p-3 flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <span className="w-6 h-6 rounded-full bg-emerald-500 text-slate-950 font-black text-xs flex items-center justify-center">✔</span>
+                              <div>
+                                <p className="text-[11px] font-black text-white">Investimento realizado com sucesso!</p>
+                                <p className="text-[9px] text-emerald-300 font-medium">CDB 100% do CDI • Banco XP</p>
+                              </div>
+                            </div>
+                            <span className="text-[10px] font-black text-emerald-300 bg-emerald-900/60 px-2 py-0.5 rounded border border-emerald-500/30">
+                              R$ 1.000,00
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Lista de Vantagens */}
+                      <ul className="space-y-1.5 text-xs text-emerald-200 pt-3 border-t border-emerald-500/20 font-medium">
+                        <li className="flex items-center gap-2">
+                          <span className="text-emerald-400 font-bold">✔</span> Explicação visual, clara e sem jargões difíceis
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="text-emerald-400 font-bold">✔</span> Entendimento imediato em apenas 5 minutos
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="text-emerald-400 font-bold">✔</span> Comparação visual de prazos e rentabilidade
+                        </li>
+                        <li className="flex items-center gap-2">
+                          <span className="text-emerald-400 font-bold">✔</span> Mais segurança e clareza para fazer seu dinheiro render
+                        </li>
+                      </ul>
+                    </div>
+
+                  </div>
+
+                </div>
+              )}
+
+            </div>
+
+            {/* Seletor Interativo das 5 Pranchas Oficiais para Consulta Detalhada */}
+            <div className="flex flex-wrap items-center justify-center gap-2 mb-8 max-w-4xl mx-auto">
+              {ATTACHED_MAPS_LIST.map((board) => (
+                <button
+                  key={board.id}
+                  onClick={() => setActiveBoardTab(board.id)}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all duration-200 ease-out hover:scale-105 active:scale-95 cursor-pointer flex items-center gap-2 border select-none ${
+                    activeBoardTab === board.id
+                      ? 'bg-[#06B6D4] text-slate-950 border-cyan-300 shadow-[0_0_20px_rgba(6,182,212,0.4)] scale-105 font-black'
+                      : 'bg-[#180630] text-purple-200 border-purple-500/40 hover:border-purple-300 hover:text-white hover:bg-purple-900/40'
+                  }`}
+                >
+                  <span className="font-mono bg-purple-500/30 text-purple-300 px-1.5 py-0.5 rounded text-[10px]">
+                    {board.code}
+                  </span>
+                  <span>{board.title}</span>
+                </button>
+              ))}
+            </div>
+
+            <div className="text-center mt-6">
+              <a 
+                href="#planos" 
+                className="inline-flex items-center gap-2 py-3 px-6 btn-tech-hot text-xs sm:text-sm font-black uppercase tracking-wider rounded-xl shadow-lg"
+              >
+                Liberar a coleção completa de 30 mapas mentais no checkout →
+              </a>
+            </div>
           </div>
 
         </div>
@@ -904,6 +1452,24 @@ export default function App() {
                 >
                   QUERO O PLANO ESSENCIAL
                 </button>
+
+                {/* Selos de Confiança abaixo do botão Essencial */}
+                <div className="flex flex-wrap items-center justify-center gap-2.5 text-[10px] text-purple-300 font-bold mt-3.5 pt-2 border-t border-purple-500/20">
+                  <span className="flex items-center gap-1 text-emerald-400">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                    Compra Segura
+                  </span>
+                  <span>•</span>
+                  <span className="flex items-center gap-1 text-cyan-300">
+                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                    Pagamento Criptografado
+                  </span>
+                  <span>•</span>
+                  <span className="flex items-center gap-1 text-purple-300">
+                    <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
+                    Privacidade Garantida
+                  </span>
+                </div>
               </div>
             </article>
 
@@ -980,12 +1546,35 @@ export default function App() {
                     >
                       QUERO O PACOTE COMPLETO →
                     </button>
+
+                    {/* Selos de Confiança abaixo do botão do Pacote Completo */}
+                    <div className="flex flex-wrap items-center justify-center gap-2.5 text-[10px] text-purple-200 font-bold mt-3.5 pt-2 border-t border-purple-500/30">
+                      <span className="flex items-center gap-1 text-emerald-300">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                        Compra Segura
+                      </span>
+                      <span>•</span>
+                      <span className="flex items-center gap-1 text-cyan-300">
+                        <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                        Pagamento Criptografado
+                      </span>
+                      <span>•</span>
+                      <span className="flex items-center gap-1 text-purple-300">
+                        <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
+                        Privacidade Garantida
+                      </span>
+                    </div>
                   </div>
                 </article>
               </div>
             </div>
 
           </div>
+
+          {/* ═══════════════════════════════════════════════════════════════════
+              SEÇÃO COM SELOS DE CONFIANÇA ABAIXO DOS BOTÕES DE COMPRA
+          ════════════════════════════════════════════════════════════════════ */}
+          <TrustBadges variant="cards" />
 
         </div>
       </section>
@@ -1106,6 +1695,9 @@ export default function App() {
           >
             QUERO ACESSAR OS MAPAS MENTAIS →
           </a>
+
+          {/* Selos de Confiança abaixo do botão de compra final */}
+          <TrustBadges variant="inline" className="max-w-lg mx-auto" />
 
           <p className="text-xs text-purple-300 mt-4">
             Pagamento único · PDF digital · Garantia incondicional de 7 dias

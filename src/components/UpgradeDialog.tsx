@@ -72,6 +72,19 @@ export const UpgradeDialog: React.FC<UpgradeDialogProps> = ({
         >
           Não, prefiro continuar apenas com o Essencial por R$ 15,90
         </button>
+
+        {/* Selos de Compra Segura, Pagamento Criptografado e Privacidade */}
+        <div className="flex flex-wrap items-center justify-center gap-3 pt-3 mt-2 border-t border-slate-100 text-[10px] text-slate-600 font-bold">
+          <span className="flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+            🛡️ Compra Segura
+          </span>
+          <span className="flex items-center gap-1 text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
+            🔒 Pagamento Criptografado
+          </span>
+          <span className="flex items-center gap-1 text-purple-700 bg-purple-50 px-2 py-0.5 rounded-full border border-purple-200">
+            🛡️ Privacidade Garantida
+          </span>
+        </div>
       </div>
     </div>
   );
