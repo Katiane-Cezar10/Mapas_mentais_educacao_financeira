@@ -127,11 +127,13 @@ export const MapLightboxModal: React.FC<MapLightboxModalProps> = ({
               Voltar à página
             </button>
             <a
-              href="#planos"
+              href="https://pay.hotmart.com/E107840982R?bid=1790938404280"
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={onClose}
               className="px-5 py-2.5 btn-tech-hot text-xs sm:text-sm font-black uppercase rounded-xl tracking-wider"
             >
-              Quero todos os 30 mapas por R$ 15,90
+              Quero todos os 30 mapas no Pacote Completo →
             </a>
           </div>
         </div>

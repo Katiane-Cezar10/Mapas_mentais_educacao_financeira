@@ -596,10 +596,12 @@ export const MindMapSVG: React.FC<MindMapSVGProps> = ({
         {isLocked && isInteractive && (
           <div className="absolute inset-0 flex items-center justify-center bg-slate-900/10 opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-[1px]">
             <a
-              href="#oferta"
+              href="https://pay.hotmart.com/E107840982R?bid=1790938404280"
+              target="_blank"
+              rel="noopener noreferrer"
               className="px-4 py-2 bg-[#0F172A] text-amber-300 text-xs font-bold rounded-lg border border-amber-400 brutal-shadow-sm hover:scale-105 transition-transform"
             >
-              Liberar este mapa por R$ 15,90 →
+              Liberar este mapa no Pacote Completo →
             </a>
           </div>
         )}

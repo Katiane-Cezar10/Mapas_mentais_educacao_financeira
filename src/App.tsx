@@ -16,12 +16,19 @@ import comboPrintedImg from './assets/images/mind_maps_printed_combo_17907247908
 import moneymapEcosystemImg from './assets/maps/moneymap-ecossistema-completo.png';
 import learningWithoutClassesImg from './assets/images/learning_without_classes_1790768686311.jpg';
 import mobileQuickLearningImg from './assets/images/mobile_quick_learning_1790768696715.jpg';
+import chatgptNaveguePranchasImg from './assets/images/chatgpt-image-30-de-set-de-2026-09-21-27.png';
+import bonus01ChecklistImg from './assets/images/bonus-01-checklist-30-dias.jpg';
+import bonus02ManualErrosImg from './assets/images/bonus-02-manual-10-piores-erros.jpg';
+import bonus03GuiaIRImg from './assets/images/bonus-03-guia-ir-descomplicado.jpg';
+import bonus04ChatGPTImg from './assets/images/bonus-04-chatgpt-financas.jpg';
+import bonus05QuadroMetasImg from './assets/images/bonus-05-quadro-metas.jpg';
 
 // =========================================================================
 // CONFIGURAÇÕES DO PRODUTO & LINKS DE CHECKOUT (EDITE AQUI)
 // =========================================================================
-const CHECKOUT_ESSENTIAL_URL = "https://pay.kiwify.com.br/[SEU_CHECKOUT_AQUI]?plan=essencial_1590";
-const CHECKOUT_COMPLETE_URL = "https://pay.kiwify.com.br/[SEU_CHECKOUT_AQUI]?plan=completo_1990&bump=chatgpt2027";
+const CHECKOUT_ESSENTIAL_URL = "https://pay.hotmart.com/Q107860731W";
+const CHECKOUT_COMPLETE_URL = "https://pay.hotmart.com/E107840982R?bid=1790938404280";
+export const HOTMART_CHECKOUT_URL = "https://pay.hotmart.com/E107840982R?bid=1790938404280";
 
 export default function App() {
   // Modal de Upgrade (ao clicar no plano essencial)
@@ -208,7 +215,9 @@ export default function App() {
           Combo Completo dos 30 Mapas + 5 Bônus por apenas <b className="text-[#FFC94D] font-black text-sm">R$ 19,90</b>
         </span>
         <a 
-          href="#planos" 
+          href={CHECKOUT_COMPLETE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
           className="text-[#06B6D4] hover:text-white font-bold underline transition-colors"
         >
           GARANTIR AGORA →
@@ -261,15 +270,6 @@ export default function App() {
                   <span className="text-[10px] sm:text-xs font-bold text-amber-300 bg-amber-950/80 border border-amber-500/40 px-2.5 py-0.5 rounded-full">
                     ⏱️ Domine em 5 Minutos
                   </span>
-                  <label className="cursor-pointer text-[10px] sm:text-xs font-black text-slate-950 bg-gradient-to-r from-[#06B6D4] to-[#22D3EE] hover:brightness-110 px-3 py-1 rounded-full shadow-md flex items-center gap-1.5 transition-all active:scale-95 border border-cyan-300">
-                    <span>📷 Trocar por Foto Anexa</span>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={handleShowcaseUpload}
-                    />
-                  </label>
                 </div>
               </div>
 
@@ -306,7 +306,9 @@ export default function App() {
                   </div>
                 </div>
                 <a
-                  href="#planos"
+                  href={CHECKOUT_COMPLETE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="px-5 py-2.5 rounded-xl bg-[#06B6D4] hover:bg-[#22D3EE] text-slate-950 text-xs font-black uppercase tracking-wider transition-all shrink-0 shadow-lg shadow-cyan-500/20"
                 >
                   Garantir Meus Mapas →
@@ -400,8 +402,10 @@ export default function App() {
           {/* CTA Principal de Alta Conversão */}
           <div className="pt-2 max-w-lg mx-auto">
             <a 
-              href="#planos"
-              className="w-full inline-block py-4 px-8 btn-tech-hot btn-tech-pulse text-base sm:text-lg font-black uppercase tracking-wider"
+              href={CHECKOUT_COMPLETE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full inline-block py-4 px-8 btn-tech-hot btn-tech-pulse text-base sm:text-lg font-black uppercase tracking-wider text-center"
             >
               QUERO OS MAPAS MENTAIS AGORA →
             </a>
@@ -447,7 +451,9 @@ export default function App() {
 
           <div className="text-center mt-6">
             <a 
-              href="#planos" 
+              href={CHECKOUT_COMPLETE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-purple-700 hover:text-purple-950 underline"
             >
               Liberar a coleção completa de 30 mapas mentais no checkout →
@@ -643,7 +649,9 @@ export default function App() {
 
             <div className="mt-6 pt-6 border-t border-purple-500/20 text-center">
               <a
-                href="#planos"
+                href={CHECKOUT_COMPLETE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 py-4 px-8 btn-tech-hot text-xs sm:text-sm font-black uppercase tracking-wider rounded-2xl shadow-xl"
               >
                 QUERO APRENDER FINANÇAS DE FORMA RÁPIDA E VISUAL →
@@ -784,192 +792,22 @@ export default function App() {
               </p>
             </header>
 
-            {/* Infográfico Comparativo em Destaque (Foto Anexa) */}
+            {/* Imagem Original Anexada em Destaque */}
             <div className="max-w-5xl mx-auto mb-8">
               <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-purple-500/20">
                 <span className="text-xs text-purple-200 font-bold flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#06B6D4] animate-ping" />
                   <span>Por que o cérebro absorve tão rápido? — Sem Mapa Mental vs Com o MoneyMap</span>
                 </span>
-                <label className="cursor-pointer text-[10px] sm:text-xs font-black text-slate-950 bg-gradient-to-r from-[#06B6D4] to-[#22D3EE] hover:brightness-110 px-3.5 py-1.5 rounded-full shadow-md flex items-center gap-1.5 transition-all active:scale-95 border border-cyan-300">
-                  <span>📷 Trocar por Foto Anexa</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handlePranchasShowcaseUpload}
-                  />
-                </label>
               </div>
 
-              {customImages.pranchasShowcase ? (
-                <div className="rounded-2xl border-2 border-purple-400/40 shadow-[0_0_35px_rgba(168,85,247,0.3)] overflow-hidden bg-[#0A0116]">
-                  <img
-                    src={customImages.pranchasShowcase}
-                    alt="Por que o cérebro absorve tão rápido? Sem Mapa Mental vs Com o MoneyMap"
-                    className="w-full h-auto object-contain cursor-pointer hover:scale-[1.01] transition-transform duration-500"
-                    onClick={() => {
-                      if (typeof window !== 'undefined') {
-                        window.open(customImages.pranchasShowcase, '_blank');
-                      }
-                    }}
-                  />
-                </div>
-              ) : (
-                /* Exibição em alta fidelidade reproduzindo fielmente o anexo */
-                <div className="rounded-3xl border-2 border-purple-500/40 shadow-[0_0_40px_rgba(168,85,247,0.3)] overflow-hidden bg-gradient-to-b from-[#0F0222] via-[#080014] to-[#0A0116] p-4 sm:p-7 relative text-white">
-                  
-                  {/* Top Bar da Imagem Anexa: Por que o cérebro absorve tão rápido? */}
-                  <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#1E0836] via-[#2D0D52] to-[#1E0836] border border-purple-500/40 mb-6 flex items-center gap-4 shadow-xl">
-                    <div className="w-12 h-12 rounded-2xl bg-purple-600/30 border border-purple-400/50 flex items-center justify-center text-3xl shrink-0 shadow-inner">
-                      🧠
-                    </div>
-                    <div>
-                      <h3 className="text-lg sm:text-2xl font-black text-white leading-tight">
-                        Por que o cérebro absorve <span className="bg-gradient-to-r from-[#F472B6] to-[#C084FC] bg-clip-text text-transparent">tão rápido?</span>
-                      </h3>
-                      <p className="text-xs sm:text-sm text-purple-200 font-medium mt-0.5">
-                        O cérebro humano processa elementos visuais e ícones <strong className="text-cyan-300 font-bold">60.000 vezes mais rápido</strong> que blocos de texto ou planilhas.
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Comparativo Lado a Lado: Sem Mapa Mental vs Com o MoneyMap */}
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch relative">
-                    
-                    {/* LADO ESQUERDO: SEM MAPA MENTAL */}
-                    <div className="lg:col-span-5 rounded-2xl p-4 sm:p-5 bg-[#140424]/90 border border-rose-500/30 flex flex-col justify-between shadow-lg relative overflow-hidden">
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-rose-500/10 blur-2xl rounded-full pointer-events-none" />
-                      
-                      <div>
-                        {/* Badge de Alerta */}
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-950/80 border border-rose-500/40 text-rose-300 text-xs font-black uppercase tracking-wider mb-4 shadow-sm">
-                          <span>✖</span>
-                          <span>SEM MAPA MENTAL</span>
-                        </div>
-
-                        {/* Simulação da busca confusa no Google */}
-                        <div className="rounded-xl bg-slate-900/90 border border-slate-700/60 p-3.5 mb-4 text-left shadow-inner">
-                          <div className="flex items-center gap-2 mb-2 pb-2 border-b border-slate-700/50">
-                            <span className="text-rose-400 font-bold text-xs">G</span>
-                            <span className="text-amber-400 font-bold text-xs">o</span>
-                            <span className="text-blue-400 font-bold text-xs">o</span>
-                            <span className="text-emerald-400 font-bold text-xs">g</span>
-                            <span className="text-rose-400 font-bold text-xs">l</span>
-                            <span className="text-blue-400 font-bold text-xs">e</span>
-                            <span className="text-xs text-white font-mono ml-2 font-bold">CDB</span>
-                          </div>
-                          <ul className="text-[11px] text-slate-300 space-y-1 font-mono">
-                            <li className="flex items-center gap-1.5 text-slate-400">🔍 o que é CDB</li>
-                            <li className="flex items-center gap-1.5 text-slate-400">🔍 como funciona CDB</li>
-                            <li className="flex items-center gap-1.5 text-slate-400">🔍 qual o melhor CDB</li>
-                            <li className="flex items-center gap-1.5 text-slate-400">🔍 CDB tem risco</li>
-                            <li className="flex items-center gap-1.5 text-slate-400">🔍 como investir em CDB</li>
-                          </ul>
-                        </div>
-
-                        {/* Balões de dúvidas desorganizadas */}
-                        <div className="flex flex-wrap gap-1.5 mb-4">
-                          <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-rose-900/40 border border-rose-700/40 text-rose-200">
-                            Qual o melhor? 🤔
-                          </span>
-                          <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-rose-900/40 border border-rose-700/40 text-rose-200">
-                            Como funciona? 😵
-                          </span>
-                          <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-rose-900/40 border border-rose-700/40 text-rose-200">
-                            Tem risco? 😰
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Lista de dores */}
-                      <ul className="space-y-1.5 text-xs text-rose-200 pt-3 border-t border-rose-500/20 font-medium">
-                        <li className="flex items-center gap-2">
-                          <span className="text-rose-400 font-bold">✖</span> Informações espalhadas em 50 sites
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-rose-400 font-bold">✖</span> Difícil de entender e sem resumo prático
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-rose-400 font-bold">✖</span> Demora semanas para aprender
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-rose-400 font-bold">✖</span> Gera medo e insegurança na hora de agir
-                        </li>
-                      </ul>
-                    </div>
-
-                    {/* SETA CENTRAL DE TRANSFORMAÇÃO */}
-                    <div className="lg:col-span-2 flex flex-col items-center justify-center py-2">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-600 to-cyan-500 p-0.5 shadow-[0_0_20px_rgba(6,182,212,0.5)]">
-                        <div className="w-full h-full rounded-full bg-[#0E021F] flex items-center justify-center text-cyan-300 font-black text-lg">
-                          ➜
-                        </div>
-                      </div>
-                      <span className="text-[10px] font-black uppercase tracking-wider text-purple-300 mt-2 text-center">
-                        Transformação Visual
-                      </span>
-                    </div>
-
-                    {/* LADO DIREITO: COM O MONEYMAP */}
-                    <div className="lg:col-span-5 rounded-2xl p-4 sm:p-5 bg-[#0C1F2B]/90 border-2 border-emerald-400/50 flex flex-col justify-between shadow-[0_0_30px_rgba(16,185,129,0.2)] relative overflow-hidden">
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/15 blur-2xl rounded-full pointer-events-none" />
-
-                      <div>
-                        {/* Badge de Sucesso */}
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-400/50 text-emerald-300 text-xs font-black uppercase tracking-wider mb-4 shadow-sm">
-                          <span>✔</span>
-                          <span>COM O MONEYMAP</span>
-                        </div>
-
-                        {/* Simulação do Mapa 008 + Confirmação no Smartphone */}
-                        <div className="space-y-3 mb-4">
-                          <div className="rounded-xl bg-white text-slate-900 p-3 shadow-md border border-emerald-200">
-                            <div className="flex items-center justify-between pb-1.5 mb-1.5 border-b border-slate-200">
-                              <span className="text-[10px] font-black text-purple-900 font-mono">MAPA 008</span>
-                              <span className="text-[9px] font-bold bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded">PASSO A PASSO</span>
-                            </div>
-                            <h4 className="text-xs font-black text-slate-900">CDB — Certificado de Depósito Bancário</h4>
-                            <p className="text-[10px] text-slate-600 mt-0.5">Entenda como funciona e faça seu primeiro investimento em 5 minutos.</p>
-                          </div>
-
-                          <div className="rounded-xl bg-emerald-950/80 border border-emerald-500/40 p-3 flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <span className="w-6 h-6 rounded-full bg-emerald-500 text-slate-950 font-black text-xs flex items-center justify-center">✔</span>
-                              <div>
-                                <p className="text-[11px] font-black text-white">Investimento realizado com sucesso!</p>
-                                <p className="text-[9px] text-emerald-300 font-medium">CDB 100% do CDI • Banco XP</p>
-                              </div>
-                            </div>
-                            <span className="text-[10px] font-black text-emerald-300 bg-emerald-900/60 px-2 py-0.5 rounded border border-emerald-500/30">
-                              R$ 1.000,00
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Lista de Vantagens */}
-                      <ul className="space-y-1.5 text-xs text-emerald-200 pt-3 border-t border-emerald-500/20 font-medium">
-                        <li className="flex items-center gap-2">
-                          <span className="text-emerald-400 font-bold">✔</span> Explicação visual, clara e sem jargões difíceis
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-emerald-400 font-bold">✔</span> Entendimento imediato em apenas 5 minutos
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-emerald-400 font-bold">✔</span> Comparação visual de prazos e rentabilidade
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <span className="text-emerald-400 font-bold">✔</span> Mais segurança e clareza para fazer seu dinheiro render
-                        </li>
-                      </ul>
-                    </div>
-
-                  </div>
-
-                </div>
-              )}
-
+              <div className="rounded-2xl border-2 border-purple-400/40 shadow-[0_0_35px_rgba(168,85,247,0.3)] overflow-hidden bg-[#0A0116]">
+                <img
+                  src={customImages.pranchasShowcase || chatgptNaveguePranchasImg}
+                  alt="Navegue pelas pranchas oficiais por dentro - Por que o cérebro absorve tão rápido? Sem Mapa Mental vs Com o MoneyMap"
+                  className="w-full h-auto object-contain cursor-pointer hover:scale-[1.01] transition-transform duration-500 rounded-2xl mx-auto"
+                />
+              </div>
             </div>
 
             {/* Seletor Interativo das 5 Pranchas Oficiais para Consulta Detalhada */}
@@ -994,7 +832,9 @@ export default function App() {
 
             <div className="text-center mt-6">
               <a 
-                href="#planos" 
+                href={CHECKOUT_COMPLETE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 py-3 px-6 btn-tech-hot text-xs sm:text-sm font-black uppercase tracking-wider rounded-xl shadow-lg"
               >
                 Liberar a coleção completa de 30 mapas mentais no checkout →
@@ -1242,6 +1082,17 @@ export default function App() {
                 <span className="inline-block bg-[#FFC94D] text-[#5A3F00] font-black text-[11px] tracking-wider uppercase rounded-full px-3 py-0.5 mb-3">
                   BÔNUS 01
                 </span>
+                
+                {/* Imagem do Bônus 1 */}
+                <div className="rounded-xl overflow-hidden border border-purple-400/30 mb-4 bg-[#0A0116] shadow-md group">
+                  <img
+                    src={bonus01ChecklistImg}
+                    alt="Bônus 01: Checklist do Plano de 30 Dias"
+                    className="w-full h-52 sm:h-56 object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+
                 <h3 className="font-extrabold text-white text-base mb-2">
                   Checklist do Plano de 30 Dias
                 </h3>
@@ -1270,6 +1121,17 @@ export default function App() {
                 <span className="inline-block bg-[#FFC94D] text-[#5A3F00] font-black text-[11px] tracking-wider uppercase rounded-full px-3 py-0.5 mb-3">
                   BÔNUS 02
                 </span>
+
+                {/* Imagem do Bônus 2 */}
+                <div className="rounded-xl overflow-hidden border border-purple-400/30 mb-4 bg-[#0A0116] shadow-md group">
+                  <img
+                    src={bonus02ManualErrosImg}
+                    alt="Bônus 02: Manual dos 10 Piores Erros"
+                    className="w-full h-52 sm:h-56 object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+
                 <h3 className="font-extrabold text-white text-base mb-2">
                   Manual dos 10 Piores Erros
                 </h3>
@@ -1298,6 +1160,17 @@ export default function App() {
                 <span className="inline-block bg-[#FFC94D] text-[#5A3F00] font-black text-[11px] tracking-wider uppercase rounded-full px-3 py-0.5 mb-3">
                   BÔNUS 03
                 </span>
+
+                {/* Imagem do Bônus 3 */}
+                <div className="rounded-xl overflow-hidden border border-purple-400/30 mb-4 bg-[#0A0116] shadow-md group">
+                  <img
+                    src={bonus03GuiaIRImg}
+                    alt="Bônus 03: Guia do IR Descomplicado"
+                    className="w-full h-52 sm:h-56 object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+
                 <h3 className="font-extrabold text-white text-base mb-2">
                   Guia do IR Descomplicado
                 </h3>
@@ -1326,6 +1199,17 @@ export default function App() {
                 <span className="inline-block bg-[#06B6D4] text-[#0A0116] font-black text-[11px] tracking-wider uppercase rounded-full px-3 py-0.5 mb-3">
                   BÔNUS 04 · INTELIGÊNCIA ARTIFICIAL
                 </span>
+
+                {/* Imagem do Bônus 4 */}
+                <div className="rounded-xl overflow-hidden border border-cyan-400/40 mb-4 bg-[#0A0116] shadow-md group">
+                  <img
+                    src={bonus04ChatGPTImg}
+                    alt="Bônus 04: ChatGPT para Finanças"
+                    className="w-full h-52 sm:h-56 object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+
                 <h3 className="font-extrabold text-white text-base mb-2">
                   ChatGPT para Finanças
                 </h3>
@@ -1354,6 +1238,17 @@ export default function App() {
                 <span className="inline-block bg-gradient-to-r from-[#A855F7] to-[#EC4899] text-white font-black text-[11px] tracking-wider uppercase rounded-full px-3 py-0.5 mb-3">
                   BÔNUS 05 · ALTO IMPACTO
                 </span>
+
+                {/* Imagem do Bônus 5 */}
+                <div className="rounded-xl overflow-hidden border border-fuchsia-400/40 mb-4 bg-[#0A0116] shadow-md group">
+                  <img
+                    src={bonus05QuadroMetasImg}
+                    alt="Bônus 05: Quadro de Metas: Um 2027 de Conquistas"
+                    className="w-full h-52 sm:h-56 object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+
                 <h3 className="font-extrabold text-white text-base mb-2">
                   Quadro de Metas: Um 2027 de Conquistas
                 </h3>
@@ -1445,13 +1340,14 @@ export default function App() {
                   </div>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => setShowUpgradeModal(true)}
-                  className="w-full py-4 px-6 btn-tech-ghost text-sm uppercase tracking-wide"
+                <a
+                  href={CHECKOUT_ESSENTIAL_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full inline-block text-center py-4 px-6 btn-tech-ghost text-sm uppercase tracking-wide cursor-pointer"
                 >
                   QUERO O PLANO ESSENCIAL
-                </button>
+                </a>
 
                 {/* Selos de Confiança abaixo do botão Essencial */}
                 <div className="flex flex-wrap items-center justify-center gap-2.5 text-[10px] text-purple-300 font-bold mt-3.5 pt-2 border-t border-purple-500/20">
@@ -1539,13 +1435,14 @@ export default function App() {
                       </div>
                     </div>
 
-                    <button
-                      type="button"
-                      onClick={() => handleCheckoutRedirect(CHECKOUT_COMPLETE_URL, 'Mapas do Dinheiro Completo', '19,90')}
-                      className="w-full py-5 px-6 btn-tech-hot btn-tech-pulse text-base sm:text-lg uppercase tracking-wide"
+                    <a
+                      href={CHECKOUT_COMPLETE_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full inline-block text-center py-5 px-6 btn-tech-hot btn-tech-pulse text-base sm:text-lg uppercase tracking-wide cursor-pointer"
                     >
                       QUERO O PACOTE COMPLETO →
-                    </button>
+                    </a>
 
                     {/* Selos de Confiança abaixo do botão do Pacote Completo */}
                     <div className="flex flex-wrap items-center justify-center gap-2.5 text-[10px] text-purple-200 font-bold mt-3.5 pt-2 border-t border-purple-500/30">
@@ -1690,7 +1587,9 @@ export default function App() {
           </p>
 
           <a 
-            href="#planos"
+            href={CHECKOUT_COMPLETE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-block w-full sm:w-auto py-5 px-8 btn-tech-hot btn-tech-pulse text-base sm:text-lg font-black uppercase tracking-wider"
           >
             QUERO ACESSAR OS MAPAS MENTAIS →
@@ -1735,30 +1634,9 @@ export default function App() {
             </button>
             <span>·</span>
             <span>Suporte: [suporte@mapasdodinheiro.com.br]</span>
-            <span>·</span>
-            <button 
-              onClick={() => setShowImageManager(true)} 
-              className="hover:underline text-cyan-300 font-bold flex items-center gap-1"
-              title="Área do administrador para configurar fotos dos mapas"
-            >
-              <span>⚙️</span> Personalizar Fotos dos Mapas
-            </button>
           </div>
         </div>
       </footer>
-
-      {/* Botão flutuante discreto para o proprietário gerenciar fotos */}
-      <button
-        onClick={() => setShowImageManager(true)}
-        className="fixed bottom-20 left-4 z-40 bg-[#1A0735]/90 hover:bg-[#250B4C] border border-purple-500/50 text-purple-200 hover:text-white px-3.5 py-1.5 rounded-full text-xs font-bold shadow-2xl backdrop-blur-md flex items-center gap-1.5 transition-all hover:scale-105"
-        title="Clique para adicionar ou trocar as fotos dos mapas mentais e combos"
-      >
-        <span>⚙️</span>
-        <span className="hidden sm:inline">Gerenciar Fotos</span>
-        {Object.keys(customImages.maps).length > 0 && (
-          <span className="w-2 h-2 rounded-full bg-emerald-400" />
-        )}
-      </button>
 
       {/* ═══════════════════════════════════════════════════════════════════
           14. BARRA FIXA NO INFERIOR DA TELA COM OPÇÃO DE COMPRA (SOLICITADO)
@@ -1802,7 +1680,9 @@ export default function App() {
             <span className="text-[#06B6D4]">🛡️</span> 7 Dias de Garantia
           </span>
           <a 
-            href="#planos"
+            href={CHECKOUT_COMPLETE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="py-2.5 sm:py-3 px-5 sm:px-7 btn-tech-hot btn-tech-pulse text-xs sm:text-sm font-black uppercase tracking-wider rounded-xl shadow-lg"
           >
             COMPRAR AGORA →
