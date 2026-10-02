@@ -1074,22 +1074,25 @@ export default function App() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="flex flex-wrap justify-center gap-6">
             
             {/* Bônus 1 */}
-            <article className="glass-tech-purple border-2 border-dashed border-purple-400/40 rounded-2xl p-5 flex flex-col justify-between shadow-lg">
+            <article className="w-full sm:w-[calc(50%-16px)] lg:w-[calc(33.333%-16px)] max-w-sm glass-tech-purple border-2 border-dashed border-purple-400/40 rounded-2xl p-5 flex flex-col justify-between shadow-lg">
               <div>
                 <span className="inline-block bg-[#FFC94D] text-[#5A3F00] font-black text-[11px] tracking-wider uppercase rounded-full px-3 py-0.5 mb-3">
                   BÔNUS 01
                 </span>
                 
-                {/* Imagem do Bônus 1 */}
-                <div className="rounded-xl overflow-hidden border border-purple-400/30 mb-4 bg-[#0A0116] shadow-md group">
+                {/* Imagem do Bônus 1 em formato 3:4 (vertical) 1024x1365 px */}
+                <div className="w-full aspect-[3/4] rounded-xl overflow-hidden border border-purple-400/30 mb-4 bg-[#0A0116] shadow-md group relative">
                   <img
                     src={bonus01ChecklistImg}
                     alt="Bônus 01: Checklist do Plano de 30 Dias"
-                    className="w-full h-52 sm:h-56 object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    width={1024}
+                    height={1365}
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     referrerPolicy="no-referrer"
+                    loading="lazy"
                   />
                 </div>
 
@@ -1116,19 +1119,22 @@ export default function App() {
             </article>
 
             {/* Bônus 2 */}
-            <article className="glass-tech-purple border-2 border-dashed border-purple-400/40 rounded-2xl p-5 flex flex-col justify-between shadow-lg">
+            <article className="w-full sm:w-[calc(50%-16px)] lg:w-[calc(33.333%-16px)] max-w-sm glass-tech-purple border-2 border-dashed border-purple-400/40 rounded-2xl p-5 flex flex-col justify-between shadow-lg">
               <div>
                 <span className="inline-block bg-[#FFC94D] text-[#5A3F00] font-black text-[11px] tracking-wider uppercase rounded-full px-3 py-0.5 mb-3">
                   BÔNUS 02
                 </span>
 
-                {/* Imagem do Bônus 2 */}
-                <div className="rounded-xl overflow-hidden border border-purple-400/30 mb-4 bg-[#0A0116] shadow-md group">
+                {/* Imagem do Bônus 2 em formato 3:4 (vertical) 1024x1365 px */}
+                <div className="w-full aspect-[3/4] rounded-xl overflow-hidden border border-purple-400/30 mb-4 bg-[#0A0116] shadow-md group relative">
                   <img
                     src={bonus02ManualErrosImg}
                     alt="Bônus 02: Manual dos 10 Piores Erros"
-                    className="w-full h-52 sm:h-56 object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    width={1024}
+                    height={1365}
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     referrerPolicy="no-referrer"
+                    loading="lazy"
                   />
                 </div>
 
@@ -1155,19 +1161,22 @@ export default function App() {
             </article>
 
             {/* Bônus 3 */}
-            <article className="glass-tech-purple border-2 border-dashed border-purple-400/40 rounded-2xl p-5 flex flex-col justify-between shadow-lg">
+            <article className="w-full sm:w-[calc(50%-16px)] lg:w-[calc(33.333%-16px)] max-w-sm glass-tech-purple border-2 border-dashed border-purple-400/40 rounded-2xl p-5 flex flex-col justify-between shadow-lg">
               <div>
                 <span className="inline-block bg-[#FFC94D] text-[#5A3F00] font-black text-[11px] tracking-wider uppercase rounded-full px-3 py-0.5 mb-3">
                   BÔNUS 03
                 </span>
 
-                {/* Imagem do Bônus 3 */}
-                <div className="rounded-xl overflow-hidden border border-purple-400/30 mb-4 bg-[#0A0116] shadow-md group">
+                {/* Imagem do Bônus 3 em formato 3:4 (vertical) 1024x1365 px */}
+                <div className="w-full aspect-[3/4] rounded-xl overflow-hidden border border-purple-400/30 mb-4 bg-[#0A0116] shadow-md group relative">
                   <img
                     src={bonus03GuiaIRImg}
                     alt="Bônus 03: Guia do IR Descomplicado"
-                    className="w-full h-52 sm:h-56 object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    width={1024}
+                    height={1365}
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     referrerPolicy="no-referrer"
+                    loading="lazy"
                   />
                 </div>
 
@@ -1194,19 +1203,22 @@ export default function App() {
             </article>
 
             {/* Bônus 4 (ChatGPT Finanças) */}
-            <article className="glass-tech-purple border-2 border-dashed border-cyan-400/50 rounded-2xl p-5 flex flex-col justify-between shadow-lg md:col-span-1 lg:col-span-1">
+            <article className="w-full sm:w-[calc(50%-16px)] lg:w-[calc(33.333%-16px)] max-w-sm glass-tech-purple border-2 border-dashed border-cyan-400/50 rounded-2xl p-5 flex flex-col justify-between shadow-lg">
               <div>
                 <span className="inline-block bg-[#06B6D4] text-[#0A0116] font-black text-[11px] tracking-wider uppercase rounded-full px-3 py-0.5 mb-3">
                   BÔNUS 04 · INTELIGÊNCIA ARTIFICIAL
                 </span>
 
-                {/* Imagem do Bônus 4 */}
-                <div className="rounded-xl overflow-hidden border border-cyan-400/40 mb-4 bg-[#0A0116] shadow-md group">
+                {/* Imagem do Bônus 4 em formato 3:4 (vertical) 1024x1365 px */}
+                <div className="w-full aspect-[3/4] rounded-xl overflow-hidden border border-cyan-400/40 mb-4 bg-[#0A0116] shadow-md group relative">
                   <img
                     src={bonus04ChatGPTImg}
                     alt="Bônus 04: ChatGPT para Finanças"
-                    className="w-full h-52 sm:h-56 object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    width={1024}
+                    height={1365}
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     referrerPolicy="no-referrer"
+                    loading="lazy"
                   />
                 </div>
 
@@ -1233,19 +1245,22 @@ export default function App() {
             </article>
 
             {/* Bônus 5 (Quadro de Metas 2027) */}
-            <article className="glass-tech-purple border-2 border-dashed border-fuchsia-400/50 rounded-2xl p-5 flex flex-col justify-between shadow-lg md:col-span-2 lg:col-span-2">
+            <article className="w-full sm:w-[calc(50%-16px)] lg:w-[calc(33.333%-16px)] max-w-sm glass-tech-purple border-2 border-dashed border-fuchsia-400/50 rounded-2xl p-5 flex flex-col justify-between shadow-lg">
               <div>
                 <span className="inline-block bg-gradient-to-r from-[#A855F7] to-[#EC4899] text-white font-black text-[11px] tracking-wider uppercase rounded-full px-3 py-0.5 mb-3">
                   BÔNUS 05 · ALTO IMPACTO
                 </span>
 
-                {/* Imagem do Bônus 5 */}
-                <div className="rounded-xl overflow-hidden border border-fuchsia-400/40 mb-4 bg-[#0A0116] shadow-md group">
+                {/* Imagem do Bônus 5 em formato 3:4 (vertical) 1024x1365 px */}
+                <div className="w-full aspect-[3/4] rounded-xl overflow-hidden border border-fuchsia-400/40 mb-4 bg-[#0A0116] shadow-md group relative">
                   <img
                     src={bonus05QuadroMetasImg}
                     alt="Bônus 05: Quadro de Metas: Um 2027 de Conquistas"
-                    className="w-full h-52 sm:h-56 object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    width={1024}
+                    height={1365}
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     referrerPolicy="no-referrer"
+                    loading="lazy"
                   />
                 </div>
 
